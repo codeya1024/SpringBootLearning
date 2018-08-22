@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="jquery-1.11.1.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="button2">跨域调用--非jsonp</button>
+</body>
+<script>
+    function callEndpointService(url) {
+        $.ajax({
+            type: "POST",
+            async: "true",
+            url: url,
+            dataType: "text",
+           // jsonp:"jsonpCallback",
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus + "," + errorThrown);
+            },
+            beforeSend: function (XMLHttpRequest) {
+            },
+            xhrFields: {
+             withCredentials: true
+             },
+            success: function (data, status) {
+                alert("数据：" + data + "\n状态：" + status);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+
+        $("#button2").click(function () {
+            callEndpointService('http://127.0.0.1:8082/helloCross')
+        });
+
+
+    });
+</script>
+</html>
