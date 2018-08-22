@@ -1,22 +1,16 @@
 package com.codeya.springboot.testjdbc.controller;
 
+import com.codeya.springboot.test.vo.ProcessResult;
 import com.codeya.springboot.testjdbc.entity.Staff;
-import com.codeya.springboot.testjdbc.service.StaffService;
 import com.codeya.springboot.testjdbc.service.intf.StaffAPI;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import static org.springframework.http.MediaType.TEXT_PLAIN;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by codeya on 2017/12/5.
@@ -53,6 +47,46 @@ public class StaffController {
         log.debug("StaffController.test calling");
         Staff staff = new Staff();
         return staff;
+    }
+
+
+    @RequestMapping(value="/test_path_variable/{id}")
+    public ProcessResult test_path_variable(@PathVariable("id")String id) {
+        log.info(id.toString());
+        ProcessResult result = new  ProcessResult(ProcessResult.SUCCESS,"OK","id="+id);
+        return result;
+    }
+    @Value("${server.port}")
+    String port;
+    @RequestMapping(value="/test_path_and_param/{id}")
+    public ProcessResult test_path_and_param(@PathVariable("id")String id,@RequestParam("name")String name ) {
+        log.info(id.toString());
+        ProcessResult result = new  ProcessResult(ProcessResult.SUCCESS,"OK","id="+id+",name="+name+",port:="+port);
+        return result;
+    }
+    @RequestMapping(value="/test_request_param")
+    public ProcessResult test_request_param(@RequestParam ("id")String id,@RequestParam("name")String name) {
+        log.info("id:{},name:{}",id.toString(),name.toString());
+        ProcessResult result = new  ProcessResult(ProcessResult.SUCCESS,"OK","id="+id+"name="+name);
+        return result;
+    }
+    /**
+     * post方式传递自定义对象。。ajax调用时需要json写法
+     * @return
+     */
+    @PostMapping("test_questbody")
+    public ProcessResult test_questbody(@RequestBody Staff staff) {
+        log.info(staff.toString());
+        //staff.setBirthday(null);
+        ProcessResult result = new  ProcessResult(ProcessResult.SUCCESS,"OK",staff);
+        return result;
+    }
+    @PostMapping("test_path_body/{id}")
+    public ProcessResult test_path_body(@PathVariable("id") String id,@RequestBody Staff staff) {
+        log.info("id"+id+",staff:"+staff.toString());
+        //staff.setBirthday(null);
+        ProcessResult result = new  ProcessResult(ProcessResult.SUCCESS,"OK",staff);
+        return result;
     }
 
 }

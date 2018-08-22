@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8081
 test:
     properties1: hellooooooooooooo-dev  #相当于 在properties文件里的test.properties1=hellooooooooooooo
     properties2: 11

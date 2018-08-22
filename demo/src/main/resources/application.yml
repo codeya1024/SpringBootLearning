@@ -28,3 +28,10 @@ spring:
    # static-locations:
 mybatis:
   mapper-locations: classpath*:com/codeya/springboot/**/dao/*.xml
+#外系统登录
+outer:
+  login:
+    ask_resouces: #是个map
+      RES_GIS: resGis
+      Other: other
+    description: hahahaha

@@ -8,6 +8,8 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.util.UrlPathHelper;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -54,9 +56,16 @@ public class AntPathTest {
         String pattern="/resweb/{version}/user/{user}";
         String url_1="/resweb/1.0/user/000111";
         String url_2="/resweb//1.0/user/000111";
+        try {
+           System.out.println( URLEncoder.encode(pattern,"utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace( );
+        }
         Map<String, String> vars = getPathMatcher().extractUriTemplateVariables(pattern, url_1);
         //Map<String, String> decodedVars = getUrlPathHelper().decodePathVariables(request, vars);
         System.out.println(vars);
+
+        vars.clear();
 
     }
 

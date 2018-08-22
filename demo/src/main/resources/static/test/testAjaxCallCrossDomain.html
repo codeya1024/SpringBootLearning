@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="jquery-1.11.1.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="button1">同域调用</button>
+<button id="button2">jsonp跨域调用</button>
+<button id="button3">非jsonp跨域调用</button>
+</body>
+<script>
+    function callEndpointServiceJsonp(url) {
+        $.ajax({
+            type: "POST",
+            async: "true",
+            url: url,
+            dataType: "jsonp",
+            jsonp:"jsonpCallback",
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus + "," + errorThrown);
+            },
+            beforeSend: function (XMLHttpRequest) {
+            },
+           /* 使用jsonp时无需添加此属性。cookie会默认传递到后端
+           xhrFields: {
+                withCredentials: true
+            },*/
+            success: function (data, status) {
+                alert("数据：" + data + "\n状态：" + status);
+            }
+        });
+    }
+    function callEndpointServiceCross(url) {
+        $.ajax({
+            type: "POST",
+            async: "true",
+            url: url,
+            dataType: "text",
+            // jsonp:"jsonpCallback",
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus + "," + errorThrown);
+            },
+            beforeSend: function (XMLHttpRequest) {
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (data, status) {
+                alert("数据：" + data + "\n状态：" + status);
+            }
+        });
+    }
+    $(document).ready(function () {
+        $("#button1").click(function () {
+            jQuery.post("/hello",
+                {
+                    name: "Donald Duck",
+                    city: "Duckburg"
+                },
+                function (data, status) {
+                    alert("数据：" + data + "\n状态：" + status);
+                });
+        });
+        $("#button2").click(function () {
+            callEndpointServiceJsonp('http://127.0.0.1:8082/hello')
+        });
+        $("#button3").click(function () {
+            callEndpointServiceCross('http://127.0.0.1:8082/helloCross')
+        });
+
+    });
+</script>
+</html>
